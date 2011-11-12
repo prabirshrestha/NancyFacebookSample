@@ -93,8 +93,8 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Modules\RootModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\IFacebookUserMapper.cs" />
-    <Compile Include="Repositories\UserMapper.cs" />
+    <Compile Include="Repositories\IAppUserMapper.cs" />
+    <Compile Include="Repositories\InMemoryAppUserMapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
