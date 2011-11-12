@@ -17,5 +17,13 @@ namespace NancyFacebookSample
                                       };
             FormsAuthentication.Enable(pipelines, formsAuthConfig);
         }
+
+        protected override void ConfigureApplicationContainer(TinyIoC.TinyIoCContainer container)
+        {
+            base.ConfigureApplicationContainer(container);
+
+            container.Register<Repositories.IAppUserMapper, Repositories.InMemoryAppUserMapper>().AsSingleton();
+            container.Register<IUserMapper>(container.Resolve<Repositories.IAppUserMapper>());
+        }
     }
 }
