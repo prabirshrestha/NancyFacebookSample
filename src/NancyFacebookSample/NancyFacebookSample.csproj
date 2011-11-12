@@ -89,6 +89,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bootstrapper.cs" />
     <Compile Include="Models\IFacebookUser.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Modules\RootModule.cs" />
