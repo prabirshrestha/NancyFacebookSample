@@ -45,3 +45,4 @@ lint.db
 # Misc Ignores
 Thumbs.db
 !libs/*/[Bb]in/
+src/packages/
