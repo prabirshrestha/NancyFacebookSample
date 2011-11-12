@@ -80,7 +80,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -92,6 +94,7 @@
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Models\IFacebookUser.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Modules\FacebookAuthorizationModule.cs" />
     <Compile Include="Modules\FacebookModule.cs" />
     <Compile Include="Modules\RootModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -101,9 +104,14 @@
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="views\FacebookLoginCallbackError.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="views\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="views\facebook\index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -23,7 +23,10 @@
         {
             if (user == null)
                 throw new ArgumentNullException("user");
-            _users.AddOrUpdate(user.FacebookId, user, (id, u) => user);
+            if (user.Identifier == Guid.Empty)
+                user.Identifier = Guid.NewGuid();
+
+            _users.AddOrUpdate(user.FacebookId, user, (key, oldValue) => user);
         }
 
         public void Remove(Guid identifier)

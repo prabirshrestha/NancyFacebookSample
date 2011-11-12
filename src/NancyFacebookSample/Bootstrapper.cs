@@ -42,14 +42,24 @@ namespace NancyFacebookSample
         {
             var facebookClient = new Facebook.FacebookClient();
 
-            var fbUser = context.CurrentUser as IFacebookUser;
-            if (fbUser != null)
-                facebookClient.AccessToken = fbUser.FacebookAccessToken;
-
             if (context.Request != null && context.Request.Url != null)
                 facebookClient.IsSecureConnection = context.Request.Url.Scheme == "https";
 
             container.Register(facebookClient);
+        }
+
+        protected override void RequestStartup(TinyIoC.TinyIoCContainer container, Nancy.Bootstrapper.IPipelines pipelines, NancyContext context)
+        {
+            base.RequestStartup(container, pipelines, context);
+
+            pipelines.BeforeRequest += ctx =>
+                                           {
+                                               var facebookClient = container.Resolve<Facebook.FacebookClient>();
+                                               var fbUser = context.CurrentUser as IFacebookUser;
+                                               if (fbUser != null)
+                                                   facebookClient.AccessToken = fbUser.FacebookAccessToken;
+                                               return null;
+                                           };
         }
 
         private void RegisterIFacebookApplicationPerRequest(TinyIoC.TinyIoCContainer container, NancyContext context)
