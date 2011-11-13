@@ -5,6 +5,7 @@ namespace NancyFacebookSample.Modules
     using Facebook;
     using Nancy;
     using Nancy.Security;
+    using Nancy.Extensions;
 
     public class FacebookModule : NancyModule
     {
@@ -23,7 +24,7 @@ namespace NancyFacebookSample.Modules
                                catch (FacebookOAuthException)
                                {
                                    // fb access token is no longer valid.
-                                   return Response.AsRedirect("~/facebook/login?returnUrl=/facebook");
+                                   return Response.AsRedirect("~/facebook/login?returnUrl=" + Context.ToFullPath(ModulePath + "/"));
                                }
                            };
         }
