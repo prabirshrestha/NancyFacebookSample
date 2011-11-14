@@ -96,6 +96,7 @@
     <Compile Include="Models\IFacebookUser.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Modules\FacebookAuthorizationModule.cs" />
+    <Compile Include="Modules\FacebookCanvasModule.cs" />
     <Compile Include="Modules\FacebookModule.cs" />
     <Compile Include="Modules\FacebookRegistrationModule.cs" />
     <Compile Include="Modules\RootModule.cs" />

@@ -50,7 +50,7 @@ namespace NancyFacebookSample.Modules
                         facebookApplication.AppId,
                         HttpUtility.UrlEncode("http://localhost:45254" + Context.ToFullPath("~/register/facebookcallback")),
                         HttpUtility.UrlEncode(JsonSerializer.Current.SerializeObject(fields)));
-
+                    
                     return View["register", model];
                 };
 

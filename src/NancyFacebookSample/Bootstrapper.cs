@@ -58,6 +58,22 @@ namespace NancyFacebookSample
                                                var fbUser = context.CurrentUser as IFacebookUser;
                                                if (fbUser != null)
                                                    facebookClient.AccessToken = fbUser.FacebookAccessToken;
+
+                                               #region SignedRequest
+
+                                               if (context.Request != null)
+                                               {
+                                                   dynamic signedRequest;
+                                                   var fbApp = container.Resolve<Facebook.IFacebookApplication>();
+                                                   if (context.Request.TryParseFacebookSignedRequest(fbApp.AppId, fbApp.AppSecret, out signedRequest))
+                                                   {
+                                                       if (signedRequest.ContainsKey("oauth_token"))
+                                                           facebookClient.AccessToken = signedRequest.oauth_token;
+                                                   }
+                                               }
+
+                                               #endregion
+
                                                return null;
                                            };
         }
@@ -72,8 +88,12 @@ namespace NancyFacebookSample
                 {
                     facebookApplication = new Facebook.DefaultFacebookApplication
                                               {
-                                                  AppId = ",
-                                                  AppSecret = "
+                                                  AppId = ""
+                                                  AppSecret = ""
+                                                  SiteUrl = "http://localhost:45254/",
+                                                  CanvasUrl = "http://localhost:45254/canvas/",
+                                                  SecureCanvasUrl = "https://localhost:44302/canvas/",
+                                                  CanvasPage = "http://apps.facebook.com/appname
                                               };
                 }
                 else
