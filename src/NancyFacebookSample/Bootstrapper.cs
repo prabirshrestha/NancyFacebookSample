@@ -5,6 +5,7 @@ namespace NancyFacebookSample
     using Nancy;
     using Nancy.Authentication.Forms;
     using Nancy.Extensions;
+    using Nancy.Facebook;
     using NancyFacebookSample.Models;
 
     public class Bootstrapper : DefaultNancyBootstrapper
@@ -52,30 +53,31 @@ namespace NancyFacebookSample
         {
             base.RequestStartup(container, pipelines, context);
 
-            pipelines.BeforeRequest += ctx =>
-                                           {
-                                               var facebookClient = container.Resolve<Facebook.FacebookClient>();
-                                               var fbUser = context.CurrentUser as IFacebookUser;
-                                               if (fbUser != null)
-                                                   facebookClient.AccessToken = fbUser.FacebookAccessToken;
+            pipelines.BeforeRequest.AddItemToStartOfPipeline(
+                ctx =>
+                {
+                    var facebookClient = container.Resolve<Facebook.FacebookClient>();
+                    var fbUser = context.CurrentUser as IFacebookUser;
+                    if (fbUser != null)
+                        facebookClient.AccessToken = fbUser.FacebookAccessToken;
 
-                                               #region SignedRequest
+                    #region SignedRequest
 
-                                               if (context.Request != null)
-                                               {
-                                                   dynamic signedRequest;
-                                                   var fbApp = container.Resolve<Facebook.IFacebookApplication>();
-                                                   if (context.Request.TryParseFacebookSignedRequest(fbApp.AppId, fbApp.AppSecret, out signedRequest))
-                                                   {
-                                                       if (signedRequest.ContainsKey("oauth_token"))
-                                                           facebookClient.AccessToken = signedRequest.oauth_token;
-                                                   }
-                                               }
+                    if (context.Request != null)
+                    {
+                        dynamic signedRequest;
+                        var fbApp = container.Resolve<Facebook.IFacebookApplication>();
+                        if (context.Request.TryParseFacebookSignedRequest(fbApp.AppId, fbApp.AppSecret, out signedRequest))
+                        {
+                            if (signedRequest.ContainsKey("oauth_token"))
+                                facebookClient.AccessToken = signedRequest.oauth_token;
+                        }
+                    }
 
-                                               #endregion
+                    #endregion
 
-                                               return null;
-                                           };
+                    return null;
+                });
         }
 
         private void RegisterIFacebookApplicationPerRequest(TinyIoC.TinyIoCContainer container, NancyContext context)
@@ -88,12 +90,12 @@ namespace NancyFacebookSample
                 {
                     facebookApplication = new Facebook.DefaultFacebookApplication
                                               {
-                                                  AppId = ""
-                                                  AppSecret = ""
+                                                  AppId = ",
+                                                  AppSecret = ",
                                                   SiteUrl = "http://localhost:45254/",
                                                   CanvasUrl = "http://localhost:45254/canvas/",
                                                   SecureCanvasUrl = "https://localhost:44302/canvas/",
-                                                  CanvasPage = "http://apps.facebook.com/appname
+                                                  CanvasPage = "http://apps.facebook.com/appname/
                                               };
                 }
                 else

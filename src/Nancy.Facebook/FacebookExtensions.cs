@@ -1,5 +1,5 @@
 ﻿
-namespace NancyFacebookSample
+namespace Nancy.Facebook
 {
     using System;
     using System.Collections.Generic;
@@ -55,7 +55,7 @@ namespace NancyFacebookSample
                 if (string.IsNullOrWhiteSpace(encodedignature) || string.IsNullOrWhiteSpace(encodedEnvelope))
                     throw new InvalidOperationException(InvalidSignedRequest);
 
-                var envelope = (IDictionary<string, object>)Facebook.JsonSerializer.Current.DeserializeObject(Encoding.UTF8.GetString(Base64UrlDecode(encodedEnvelope)));
+                var envelope = (IDictionary<string, object>)SimpleJson.SimpleJson.DeserializeObject(Encoding.UTF8.GetString(Base64UrlDecode(encodedEnvelope)));
                 var algorithm = (string)envelope["algorithm"];
                 if (!algorithm.Equals("HMAC-SHA256"))
                     throw new InvalidOperationException("Unknown algorithm. Expected HMAC-SHA256");

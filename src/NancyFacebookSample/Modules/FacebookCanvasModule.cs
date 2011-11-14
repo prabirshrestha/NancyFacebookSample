@@ -3,6 +3,7 @@ namespace NancyFacebookSample.Modules
 {
     using Facebook;
     using Nancy;
+    using Nancy.Facebook;
 
     public class FacebookCanvasModule : NancyModule
     {

@@ -7,6 +7,7 @@ namespace NancyFacebookSample.Modules
     using Nancy;
     using Nancy.Authentication.Forms;
     using Nancy.Extensions;
+    using Nancy.Facebook;
     using Nancy.Helpers;
     using NancyFacebookSample.Models;
     using Repositories;

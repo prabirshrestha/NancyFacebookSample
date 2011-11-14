@@ -92,7 +92,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="FacebookExtensions.cs" />
     <Compile Include="Models\IFacebookUser.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Modules\FacebookAuthorizationModule.cs" />
@@ -118,6 +117,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="views\register.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Nancy.Facebook\Nancy.Facebook.csproj">
+      <Project>{aff37503-627d-4833-ad37-81cd7a126d36}</Project>
+      <Name>Nancy.Facebook</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
