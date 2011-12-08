@@ -119,12 +119,12 @@
 
         #region Facebook Application Helper
 
-        public static string FacebookAppRedirectHtml(string url)
+        public static string FacebookAppRedirectScript(string url)
         {
             if (string.IsNullOrEmpty(url))
                 throw new ArgumentNullException(url);
 
-            return string.Concat("<html><head><script type=\"text/javascript\">top.location = \"", url, "\";", "</script></head><body></body></html>");
+            return string.Concat("<script type=\"text/javascript\">top.location.href = '", url, "';</script>");
         }
 
         #endregion

@@ -65,7 +65,7 @@ namespace NancyFacebookCanvasSample
                 {
                     string newUrl;
                     if (FacebookNancyExtensions.DropQueryStrings(request.Headers.Referrer, out newUrl, queryStringsToDrop))
-                        return new FacebookAppRedirectResponse(newUrl, HttpStatusCode.MovedPermanently);
+                        return new FacebookAppRedirectResponse(newUrl);
                 }
             }
 

@@ -6,16 +6,10 @@ namespace Nancy.Facebook.Responses
 
     public class FacebookAppRedirectResponse : Response
     {
-        public FacebookAppRedirectResponse(string url, HttpStatusCode statusCode = HttpStatusCode.TemporaryRedirect)
+        public FacebookAppRedirectResponse(string url)
         {
             this.ContentType = "text/html";
-            this.StatusCode = statusCode;
-            this.Contents = s =>
-            {
-                var writer = new StreamWriter(s);
-                writer.Write(FacebookWebHelper.FacebookAppRedirectHtml(url));
-                writer.Flush();
-            };
+            this.Contents = GetStringContents(FacebookWebHelper.FacebookAppRedirectScript(url));
         }
     }
 }
