@@ -207,6 +207,15 @@
                 newRedirectUri.Append(redirectUriSplit[0]);
                 newRedirectUri.Append('?');
 
+                string fragment = null;
+                // contains fragment
+                if (redirectUriSplit[1].Contains('#'))
+                {
+                    var fragmentIndex = redirectUriSplit[1].LastIndexOf('#');
+                    fragment = redirectUriSplit[1].Substring(fragmentIndex);
+                    redirectUriSplit[1] = redirectUriSplit[1].Substring(0, fragmentIndex);
+                }
+
                 var queryStrings = redirectUriSplit[1].Split('&');
                 foreach (var qs in queryStrings)
                 {
@@ -221,6 +230,11 @@
                 }
 
                 newRedirectUri.Length--;
+
+                // don't add fragment added by Facebook
+                if (returnValue && !string.IsNullOrEmpty(fragment) && fragment != "#_=_")
+                    newRedirectUri.Append(fragment);
+
                 newUrl = newRedirectUri.ToString();
             }
             else
