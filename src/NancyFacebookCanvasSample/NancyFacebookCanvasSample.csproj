@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="CustomFacebookExtensions.cs" />
     <Compile Include="Facebook.Bootstrapper.cs">
       <DependentUpon>Bootstrapper.cs</DependentUpon>
     </Compile>
@@ -100,6 +101,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="views\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="views\FacebookLoginError.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="views\Feed.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

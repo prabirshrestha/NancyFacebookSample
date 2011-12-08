@@ -1,6 +1,8 @@
 ﻿namespace NancyFacebookCanvasSample
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Facebook;
     using Nancy;
     using Nancy.Facebook;
@@ -23,10 +25,10 @@
                               {
                                   AppId = ",
                                   AppSecret = ",
-                                  SiteUrl = "http://localhost:10537/",
+                                  //SiteUrl = "http://localhost:10537/",
                                   CanvasUrl = "http://localhost:10537/",
-                                  SecureCanvasUrl = "https://localhost:44303/",
-                                  CanvasPage = "http://apps.facebook.com/appname
+                                  SecureCanvasUrl = "https://localhost:44300/",
+                                  CanvasPage = "http://apps.facebook.com/
                               });
         }
 
@@ -34,15 +36,32 @@
         {
             if (context.Request != null)
             {
+                string[] perms = null;
                 dynamic signedRequest;
                 var fbApp = container.Resolve<IFacebookApplication>();
                 if (context.TryParseFacebookSignedRequest(fbApp.AppId, fbApp.AppSecret, out signedRequest))
                 {
-                    var fb = container.Resolve<FacebookClient>();
                     if (((System.Collections.Generic.IDictionary<string, object>)signedRequest).ContainsKey("oauth_token"))
+                    {
+                        var fb = container.Resolve<FacebookClient>();
                         fb.AccessToken = signedRequest.oauth_token;
+                        try
+                        {
+                            var result = (IDictionary<string, object>)fb.Get("me/permissions");
+                            perms = ((IDictionary<string, object>)((IList<object>)result["data"])[0]).Keys.ToArray();
+                        }
+                        catch (FacebookOAuthException)
+                        {
+                            // access token is invalid so perms=none
+                            // but don't throw exception.
+                            fb.AccessToken = null;  
+                        }
+                    }
                 }
+
+                context.Items[CustomFacebookExtensions.FacebookPermsKey] = perms ?? new string[0];
             }
+
             return null;
         }
     }

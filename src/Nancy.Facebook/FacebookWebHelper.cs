@@ -117,7 +117,119 @@
 
         #endregion
 
+        #region Facebook Application Helper
+
+        public static string FacebookAppRedirectHtml(string url)
+        {
+            if (string.IsNullOrEmpty(url))
+                throw new ArgumentNullException(url);
+
+            return string.Concat("<html><head><script type=\"text/javascript\">top.location = \"", url, "\";", "</script></head><body></body></html>");
+        }
+
+        #endregion
+
+        #region OAuth Dialog Login Helper
+
+        public const string QueryStringsToDrop = "code,error_reason,error,error_description";
+
+        public static string FacebookLoginUrl(string appId, string redirectUri, string scope = null, string state = null, IDictionary<string, object> parameters = null, string referrer = null, string queryStringsToDrop = QueryStringsToDrop)
+        {
+            var defaultParameters = new Dictionary<string, object>();
+            defaultParameters["client_id"] = appId;
+            defaultParameters["redirect_uri"] = redirectUri;
+
+            if (!string.IsNullOrEmpty(scope))
+                defaultParameters["scope"] = scope;
+
+            if (!string.IsNullOrEmpty(state))
+                defaultParameters["state"] = state;
+
+            var mergedParameters = Merge(defaultParameters, parameters);
+
+            if (mergedParameters["client_id"] == null || string.IsNullOrEmpty(mergedParameters["client_id"].ToString()))
+                throw new ArgumentException("client_id requried.");
+
+            if (mergedParameters["redirect_uri"] == null || string.IsNullOrEmpty(mergedParameters["redirect_uri"].ToString()))
+            {
+                bool containsRedirectUri = false;
+                if (!string.IsNullOrEmpty(referrer))
+                {
+                    var referralUri = new Uri(referrer);
+                    if (referralUri.Host == "apps.facebook.com" || referralUri.Host == "apps.beta.facebook.com")
+                    {
+                        containsRedirectUri = true;
+                        mergedParameters["redirect_uri"] = referralUri;
+                    }
+                }
+
+                if (!containsRedirectUri)
+                    throw new ArgumentException("redirect_uri requried.");
+            }
+
+            string newRedirectUri = null;
+            DropQueryStrings(mergedParameters["redirect_uri"].ToString(), out newRedirectUri, queryStringsToDrop);
+            mergedParameters["redirect_uri"] = newRedirectUri;
+
+            var sb = new StringBuilder();
+
+            sb.Append("https://www.facebook.com/dialog/oauth/?");
+
+            foreach (var kvp in mergedParameters)
+            {
+                if (kvp.Value != null)
+                    sb.AppendFormat("{0}={1}&", kvp.Key, Uri.EscapeDataString(kvp.Value.ToString()));
+            }
+
+            sb.Length--;
+
+            return sb.ToString();
+        }
+
+        #endregion
+
         #region Helper Methods
+
+        public static bool DropQueryStrings(string url, out string newUrl, string queryStringsToDrop = FacebookWebHelper.QueryStringsToDrop)
+        {
+            if (string.IsNullOrEmpty(url))
+                throw new ArgumentNullException("url");
+
+            if (string.IsNullOrEmpty(queryStringsToDrop))
+                newUrl = url;
+
+            var returnValue = false;
+            var qsToDrop = queryStringsToDrop.Split(',');
+            var redirectUriSplit = url.ToString().Split('?');
+            if (redirectUriSplit.Length == 2 && !string.IsNullOrEmpty(redirectUriSplit[1]))
+            {
+                var newRedirectUri = new StringBuilder();
+                newRedirectUri.Append(redirectUriSplit[0]);
+                newRedirectUri.Append('?');
+
+                var queryStrings = redirectUriSplit[1].Split('&');
+                foreach (var qs in queryStrings)
+                {
+                    var kvp = qs.Split('=');
+                    if (kvp.Length == 2)
+                    {
+                        if (qs.Contains(kvp[0]))
+                            returnValue = true;
+                        else
+                            newRedirectUri.AppendFormat("{0}={1}&", kvp[0], kvp[1]);
+                    }
+                }
+
+                newRedirectUri.Length--;
+                newUrl = newRedirectUri.ToString();
+            }
+            else
+            {
+                newUrl = url;
+            }
+
+            return returnValue;
+        }
 
         /// <summary>
         /// Base64 Url decode.
@@ -174,6 +286,30 @@
                 return string.Empty;
 
             return input.EndsWith("/") ? input.Substring(0, input.Length - 1) : input;
+        }
+
+        /// <summary>
+        /// Merges two dictionaries.
+        /// </summary>
+        /// <param name="first">Default values, only used if second does not contain a value.</param>
+        /// <param name="second">Every value of the merged object is used.</param>
+        /// <returns>The merged dictionary</returns>
+        private static IDictionary<TKey, TValue> Merge<TKey, TValue>(IDictionary<TKey, TValue> first, IDictionary<TKey, TValue> second)
+        {
+            first = first ?? new Dictionary<TKey, TValue>();
+            second = second ?? new Dictionary<TKey, TValue>();
+            var merged = new Dictionary<TKey, TValue>();
+
+            foreach (var kvp in second)
+                merged.Add(kvp.Key, kvp.Value);
+
+            foreach (var kvp in first)
+            {
+                if (!merged.ContainsKey(kvp.Key))
+                    merged.Add(kvp.Key, kvp.Value);
+            }
+
+            return merged;
         }
 
         #endregion

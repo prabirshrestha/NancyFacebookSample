@@ -3,8 +3,8 @@ namespace Nancy.Facebook
 {
     using System;
     using System.Collections.Generic;
-    using Nancy;
     using global::Facebook.Web;
+    using Nancy;
 
     public static class FacebookNancyExtensions
     {
@@ -75,6 +75,23 @@ namespace Nancy.Facebook
         }
 
         #endregion
+
+        #region Facebook Login Url
+
+        public static string FacebookLoginUrl(this NancyContext context, string appId, string redirectUri = null, string scope = null, string state = null, IDictionary<string, object> parameters = null, string queryStringsToDrop = FacebookWebHelper.QueryStringsToDrop)
+        {
+            var request = context == null ? null : context.Request;
+            var referrer = request == null ? null : request.Headers.Referrer;
+            var url = FacebookWebHelper.FacebookLoginUrl(appId, redirectUri, scope, state, parameters, referrer, queryStringsToDrop);
+            return url;
+        }
+
+        #endregion
+
+        public static bool DropQueryStrings(string url, out string newUrl, string queryStringsToDrop = FacebookWebHelper.QueryStringsToDrop)
+        {
+            return FacebookWebHelper.DropQueryStrings(url, out newUrl, queryStringsToDrop);
+        }
 
         private static object DeserializeObject(string json)
         {

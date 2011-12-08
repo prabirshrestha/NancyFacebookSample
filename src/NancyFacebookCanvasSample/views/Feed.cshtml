@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <div>
+        <a href="@Model.canvasPageUrl" target="_top"'>Home</a>
+
+        <h1>Hi @Model.name</h1>
+        <div>
+            <img src="@Model.picture" alt="@Model.name" />
+        </div>
+        <div>
+            @if (!Model.ContainsKey("feeds"))
+            { 
+                <p>
+                    Need permission to access feeds.
+                    <a href="@Model.facebookLoginUrl" target="_top">Click here to grant access.</a>
+                </p>
+            }
+            else
+            {
+                foreach (var feed in Model.feeds.data)
+                {
+                    if (feed.ContainsKey("message"))
+                    {
+                        <div>
+                            <div>@feed.message <span style="text-align:left;font-size:.6em">- @feed.from.name</span></div>
+                        </div>
+                        <br />
+                    }
+                }
+            }
+        </div>
+    </div>
+</body>
+</html>
