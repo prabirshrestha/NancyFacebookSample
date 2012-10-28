@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2010
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NancyFacebookSample", "NancyFacebookSample\NancyFacebookSample.csproj", "{53EEBA2D-C483-4FE4-A118-6ADBDA22CFA8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.Facebook", "Nancy.Facebook\Nancy.Facebook.csproj", "{AFF37503-627D-4833-AD37-81CD7A126D36}"
@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7912D9
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NancyFacebookWebsiteSample", "NancyFacebookWebsiteSample\NancyFacebookWebsiteSample.csproj", "{59D2D7D7-6AC4-4965-9F6A-14DDBC72AD10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,10 @@ Global
 		{A1B888EE-475F-4C3E-A062-56F0E0B100A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1B888EE-475F-4C3E-A062-56F0E0B100A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1B888EE-475F-4C3E-A062-56F0E0B100A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59D2D7D7-6AC4-4965-9F6A-14DDBC72AD10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D2D7D7-6AC4-4965-9F6A-14DDBC72AD10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59D2D7D7-6AC4-4965-9F6A-14DDBC72AD10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59D2D7D7-6AC4-4965-9F6A-14DDBC72AD10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
