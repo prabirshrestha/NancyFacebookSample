@@ -38,6 +38,7 @@ namespace NancyFacebookWebsiteSample.Modules
 
                         AuthenticateFacebookUser(result);
                         Session.Delete(FbCsrfKey);
+                        Session.Delete(FbNextUrl);
 
                         var next = (string)Session[FbNextUrl];
                         if (!string.IsNullOrWhiteSpace(next))

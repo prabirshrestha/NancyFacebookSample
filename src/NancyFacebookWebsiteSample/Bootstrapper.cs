@@ -12,7 +12,6 @@ namespace NancyFacebookWebsiteSample
         {
             base.ApplicationStartup(container, pipelines);
 
-
             RegisterAuthenticationProviders(container);
         }
 
@@ -35,14 +34,27 @@ namespace NancyFacebookWebsiteSample
         {
             base.RequestStartup(container, pipelines, context);
 
-            pipelines.BeforeRequest.AddItemToStartOfPipeline(SetFacebookUser);
             CookieBasedSessions.Enable(pipelines);
 
+            pipelines.BeforeRequest.AddItemToEndOfPipeline(SetFacebookUser);
+            pipelines.BeforeRequest.AddItemToEndOfPipeline(ctx => SetFacebookAccessTokenInFacebookClient(container, ctx));
         }
 
         private Response SetFacebookUser(NancyContext context)
         {
             context.CurrentUser = (User)context.Request.Session["User"];
+            return null;
+        }
+
+        private Response SetFacebookAccessTokenInFacebookClient(TinyIoC.TinyIoCContainer container, NancyContext context)
+        {
+            var user = context.CurrentUser as User;
+            if (user != null)
+            {
+                var fb = new Facebook.FacebookClient { AccessToken = user.FacebookAccessToken };
+                container.Register(fb);
+            }
+
             return null;
         }
     }
